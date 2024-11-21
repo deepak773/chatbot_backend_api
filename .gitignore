@@ -1,0 +1,53 @@
+# Python-specific
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+venv/
+.env
+
+# FastAPI-specific
+*.db
+*.sqlite3
+*.log
+
+# IDE and Editor-related (VSCode, PyCharm, etc.)
+.vscode/
+.idea/
+
+# Secrets and sensitive data
+secrets/
+service-account.json
+
+# Dependency-related
+*.egg-info/
+.eggs/
+
+# Distribution files
+dist/
+build/
+*.tar.gz
+*.whl
+*.egg
+
+# PyInstaller
+*.spec
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# pytest and coverage tools
+.coverage
+*.cover
+nosetests.xml
+coverage.xml
+*.hypothesis/
+
+# macOS-specific
+.DS_Store
+
+# Windows-specific
+Thumbs.db
