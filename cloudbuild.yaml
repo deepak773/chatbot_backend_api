@@ -16,5 +16,8 @@ steps:
       - '--region'
       - 'us-central1'
       - '--allow-unauthenticated'
+build:
+  options:
+    logging: CLOUD_LOGGING_ONLY
 images:
   - 'gcr.io/$PROJECT_ID/fastapi-app'
