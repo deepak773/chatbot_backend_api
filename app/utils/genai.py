@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
-from langchain.agents import create_sql_agent
+from langchain_community.agent_toolkits.sql.base import create_sql_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from langchain.sql_database import SQLDatabase
+from langchain.utilities import SQLDatabase
 import os
 
 def create_sql_engine(database_url):
