@@ -7,7 +7,6 @@ if os.getenv("ENV") != "production":
 
 class Settings(BaseSettings):
     OPENAI_API_KEY: str
-    SERVICE_ACCOUNT_FILE: str
     db_user: str
     db_password: str
     db_name: str
