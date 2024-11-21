@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.routes import router as api_router
+import uvicorn
 
 # Create FastAPI app
 app = FastAPI(
@@ -15,3 +16,8 @@ app.include_router(api_router)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the OpenAI-powered FastAPI application!"}
+
+if __name__ == "__main__":
+    # Read the port from the environment variable or use the default (8080)
+    port = int(os.getenv("PORT", 8080))
+    uvicorn.run(app, host="0.0.0.0", port=port)
