@@ -13,7 +13,6 @@ async def generate_response(query: str):
         llm = genai.get_chat_model(settings.MODEL, settings.OPENAI_API_KEY, settings.temperature)
         sql_agent = genai.get_sql_agent(engine, settings.prompt, llm)
         response = genai.get_response_from_agent(sql_agent, query)
-        
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
