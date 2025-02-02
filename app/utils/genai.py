@@ -1,10 +1,30 @@
 from sqlalchemy import create_engine
-from langchain_community.agent_toolkits.sql.base import create_sql_agent
+from langchain.agents import create_sql_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from langchain.utilities import SQLDatabase
+#from langchain.sql_database import SQLDatabase
+from textwrap import dedent
+
+from crewai import Agent, Crew, Process, Task
+from crewai_tools import tool
+from langchain.schema import AgentFinish
+from langchain.schema.output import LLMResult
+from langchain_community.tools.sql_database.tool import (
+    InfoSQLDatabaseTool,
+    ListSQLDatabaseTool,
+    QuerySQLCheckerTool,
+    QuerySQLDataBaseTool,
+)
+from langchain_community.utilities.sql_database import SQLDatabase
+from langchain_core.callbacks.base import BaseCallbackHandler
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
 import os
+from sqlalchemy import create_engine
+import psycopg2
+from langchain_community.tools.sql_database.tool import InfoSQLDatabaseTool
+import ast
 
 def create_sql_engine(database_url):
     engine = create_engine(database_url)
