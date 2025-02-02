@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.config import settings
 import app.utils.genai as genai
-import app.utils.crew_ai_tool as crewai_tools
+from app.utils.crew_ai_tool import process_user_request
 
 # Create a router instance
 router = APIRouter()
@@ -15,10 +15,7 @@ async def generate_response(query: str):
         #sql_agent = genai.get_sql_agent(engine, settings.prompt, llm)
         #response = genai.get_response_from_agent(sql_agent, query)
         #return response
-        inputs={
-                "query":query
-        }
-        result = crewai_tools.get_crew_handle().kickoff(inputs=inputs)
+        result = process_user_request(query)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

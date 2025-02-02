@@ -125,6 +125,24 @@ data_analyst = Agent(
     allow_delegation=False,
 )
 
+controller_agent = Agent(
+    role="Controller",
+    goal="Decides whether to process user input.",
+    llm=llm,
+    backstory=(
+        "If the user input is a greeting (e.g., 'Hello', 'Hi', 'Good morning'), reply politely "
+        "without running any tasks. Otherwise, delegate appropriately and return the user's request."
+    ),
+    allow_delegation=True
+)
+
+understand_input = Task(
+    description="Analyze the user input. If it's a greeting, return 'STOP'. Otherwise, return the input unchanged.",
+    agent=controller_agent,
+    expected_output="Either 'STOP' for trivial inputs or the processed user request."
+)
+
+
 extract_data = Task(
     description="Extract data that is required for the query {query}.",
     expected_output="Database result for the query",
@@ -148,3 +166,22 @@ def get_crew_handle():
         output_log_file="crew.log",
     )
     return crew
+
+def process_user_request(user_input):
+    # Step 1: Run the controller agent first
+    crew = Crew(agents=[controller_agent], tasks=[understand_input], process=Process.sequential)
+    decision = crew.kickoff(inputs={"user_input": user_input})
+
+    if "STOP" in decision.upper():
+        return "Hello! Let me know how I can assist you."
+
+    # Step 2: Proceed only if the input is valid
+    crew = Crew(
+        agents=[controller_agent, sql_dev, data_analyst],
+        tasks=[extract_data, analyze_data],
+        process=Process.sequential,
+        verbose=2,
+        memory=False,
+        output_log_file="crew.log",
+    )
+    return crew.kickoff(inputs={"user_input": user_input})
