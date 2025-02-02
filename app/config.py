@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # Non-sensitive default settings
     # LLM Model Details
-    MODEL: str="gpt-4o-mini"
+    MODEL: str
     temperature: float=0
     class Config:
         env_file = ".env"

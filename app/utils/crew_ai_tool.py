@@ -136,12 +136,16 @@ controller_agent = Agent(
     allow_delegation=True
 )
 
-understand_input = Task(
-    description="Analyze the user input. If it's a greeting, return 'STOP'. Otherwise, return the input unchanged.",
-    agent=controller_agent,
-    expected_output="Either 'STOP' for trivial inputs or the processed user request."
-)
 
+understand_input = Task(
+    description=(
+        "Analyze the query: {query}. "
+        "If it is a simple greeting (e.g., 'Hello', 'Hi', 'Good morning'), return ONLY the word 'STOP'. "
+        "If it is a meaningful request (e.g., asking about data or analysis), return ONLY the word 'PROCEED'."
+    ),
+    expected_output="'STOP' if it's a greeting, 'PROCEED' otherwise.",
+    agent=controller_agent,
+)
 
 extract_data = Task(
     description="Extract data that is required for the query {query}.",
@@ -170,8 +174,8 @@ def get_crew_handle():
 def process_user_request(user_input):
     # Step 1: Run the controller agent first
     crew = Crew(agents=[controller_agent], tasks=[understand_input], process=Process.sequential)
-    decision = crew.kickoff(inputs={"user_input": user_input})
-
+    decision = crew.kickoff(inputs={"query": user_input})
+    print(decision)
     if "STOP" in decision.upper():
         return "Hello! Let me know how I can assist you."
 
@@ -184,4 +188,4 @@ def process_user_request(user_input):
         memory=False,
         output_log_file="crew.log",
     )
-    return crew.kickoff(inputs={"user_input": user_input})
+    return crew.kickoff(inputs={"query": user_input})
